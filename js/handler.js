@@ -66,20 +66,26 @@ function handleRegister() {
         login: username,
         password: md5(password),
     };
-    doRequest(registerUser, "SignUp", params);
-}
 
-function registerUser(resp) {
-    if (!resp || resp.error) {
-        console.log(resp.error);
-        document.querySelector("#register-result").innerHTML =
-            "Error: " + resp.error;
-        window.location.href = "index.html";
-        return;
-    }
-
-    setCookie(resp.id);
-    window.location.href = "contacts.html";
+    fetch(urlBase + "SignUp" + ext, {
+        method: "POST",
+        body: JSON.stringify(params),
+    })
+        .then((resp) => resp.json())
+        .then((resp) => {
+            if (resp.error.length > 0) {
+                document.querySelector("#register-result").innerHTML =
+                    "Error: " + resp.error;
+            } else {
+                console.log(resp);
+                setCookie(resp.id);
+                window.location.href = "contacts.html";
+            }
+        })
+        .catch((err) => {
+            document.querySelector("#register-result").innerHTML =
+                "Error: " + err;
+        });
 }
 
 // Adds a contact, then prepares it for editing
