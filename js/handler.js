@@ -10,21 +10,22 @@ function handleLogin() {
         password: md5(password),
     };
 
-    fetch(urlBase + "Login" + ext, {  
-	method: 'POST',
-	body: JSON.stringify(params),
-    	})
-	.then(resp => resp.json())
-	.then(resp => {   
-	    if (resp.error.length > 0) throw Error(resp.error);
-	    console.log(resp);
-	    setCookie(resp.id);
-	    window.location.href = "contacts.html";
-	}).catch( err =>{
+    fetch(urlBase + "Login" + ext, {
+        method: "POST",
+        body: JSON.stringify(params),
+    })
+        .then((resp) => resp.json())
+        .then((resp) => {
+            if (resp.error.length > 0) throw Error(resp.error);
+            console.log(resp);
+            setCookie(resp.id);
+            window.location.href = "contacts.html";
+        })
+        .catch((err) => {
             document.querySelector("#login-result").innerHTML =
                 "Invalid username or password";
             console.log(err);
-    	});
+        });
 }
 
 // Registers a user into the database, then logs them in
@@ -90,4 +91,8 @@ function handleCreateContact() {
     // Open contact tab
     document.getElementById("info").classList.add("info-selected");
     const cid = createContact(getID, "", "", "", "");
+}
+
+function logOut() {
+    logout();
 }
