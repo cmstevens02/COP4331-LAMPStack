@@ -73,14 +73,10 @@ function handleRegister() {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            if (resp.error.length > 0) {
-                document.querySelector("#register-result").innerHTML =
-                    "Error: " + resp.error;
-            } else {
-                console.log(resp);
-                setCookie(resp.id);
-                window.location.href = "contacts.html";
-            }
+            console.log(resp);
+            if (resp.error) throw Error(resp.error);
+            setCookie(resp.id);
+            window.location.href = "contacts.html";
         })
         .catch((err) => {
             document.querySelector("#register-result").innerHTML =
