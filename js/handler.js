@@ -73,8 +73,8 @@ function handleRegister() {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            console.log(resp);
-            if (resp.error) throw Error(resp.error);
+            if (resp.error.length > 0) throw Error(resp.error);
+
             setCookie(resp.id);
             window.location.href = "contacts.html";
         })
@@ -84,17 +84,45 @@ function handleRegister() {
         });
 }
 
-// Adds a contact, then prepares it for editing
+// Adds a contact
 function handleCreateContact() {
     // Open contact tab
     document.getElementById("info").classList.add("info-selected");
-    const cid = createContact(getID, "", "", "", "");
 
+    const params = {
+        uid: getID(),
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+    };
+
+    fetch(urlBase + "CreateContact" + ext, {
+        method: "POST",
+        body: json.stringify(params),
+    })
+        .then((resp) => resp.json())
+        .then((resp) => {
+            if (resp.error.length > 0) throw Error(resp.error);
+            document.querySelector("#create-result").innerHTML =
+                "Contact created";
+
+            cm = getCookieMap();
+            cm.set("cid", resp.cid);
+            document.cookie = serializeCookieMap(cm);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+// Saves a contact after editing
+function handleSaveContact() {
     let uid = getID();
     let firstName = document.querySelector("#editContactFirstName").value;
     let lastName = document.querySelector("#editContactLastName").value;
+    let phone = document.querySelector("#editContactPhoneNumber").value;
     let email = document.querySelector("#editContactEmail").value;
-    let phone = document.querySelector("#editContactPhone").value;
 
     if (
         firstName.length == 0 ||
@@ -107,33 +135,42 @@ function handleCreateContact() {
         return;
     }
 
+    const cm = getCookieMap();
+    const cid = cm.get("cid");
+
     const params = {
         uid: uid,
+        cid: cid,
         firstName: firstName,
         lastName: lastName,
         email: email,
         phone: phone,
-        color: "#" + ((Math.random() * 0xffffff) << 0).toString(16),
     };
-
-    fetch(url + "CreateContact" + ext, {
+    fetch(urlBase + "UpdateContact" + ext, {
         method: "POST",
         body: json.stringify(params),
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            console.log(resp);
-            if (resp.error) throw Error(resp.error);
+            if (resp.error.length > 0) throw Error(resp.error);
+
             document.querySelector("#create-result").innerHTML =
-                "Contact created";
+                "Contact saved :)";
         })
         .catch((err) => {
             console.log(err);
         });
+
+    // Close contact tab
+    document.getElementById("info").classList.remove("info-selected");
+
+    // Remove cid from cookie
+    cm.delete("cid");
+    document.cookie = serializeCookieMap(cm);
 }
 
 // Deletes a user
-function deleteUser() {
+function handleDeleteUser() {
     let uid = getID();
     let currentUser = getUser(uid);
 
@@ -158,13 +195,11 @@ function deleteUser() {
         });
 }
 
-function searchContacts() {
+function handleSearchContacts() {
     let uid = getID();
     let query = document.querySelector("#searchContact").value;
 
     if (query.length == 0) {
-        document.querySelector("#searchContact").placeholder =
-            "Please enter a valid string";
         return;
     }
 
@@ -173,6 +208,7 @@ function searchContacts() {
         query: query,
     };
 
+    let arr = [];
     fetch(urlBase + "SearchContacts" + ext, {
         method: "POST",
         body: json.stringify(params),
@@ -180,7 +216,9 @@ function searchContacts() {
         .then((resp) => resp.json())
         .then((resp) => {
             console.log(resp);
-            let arr = resp.results;
+            res = document.querySelector("#search-results");
+            res.value = resp;
+            arr = resp.results;
         })
         .catch((err) => {
             console.log(err);

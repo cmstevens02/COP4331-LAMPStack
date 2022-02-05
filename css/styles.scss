@@ -125,7 +125,7 @@ body {
         &:focus {
             outline: none;
         }
-        &.sharp { 
+        &.sharp {
             border-radius: 0;
         }
         &.round {
@@ -135,6 +135,7 @@ body {
 }
 
 #register-result,
-#login-result {
+#login-result,
+#create-result {
     color: red;
 }

@@ -55,8 +55,11 @@
             class="round"
             id="searchContact"
             placeholder="Search for a contact..."
+            onchange="handleSearchContact()"
           />
         </div>
+
+        <div id="search-results"></div>
       </div>
       <div id="info">
         <h1 class="text-s">Edit Contact</h1>
@@ -96,7 +99,7 @@
           </div>
           <span id="create-result"></span>
 
-          <button class="button inverse">Save</button>
+          <button class="button inverse" onclick="handleSaveContact()">Save</button>
         </div>
       </div>
     </div>
