@@ -10,10 +10,11 @@ $conn = new mysqli("localhost", "YayApi", "ILovePHP", "COP4331");
 if ($conn->connect_error) {
     returnWithError($conn->connect_error);
 } else {
+    $query = '%' . $inData["query"] . '%';
     $stmt = $conn->prepare("SELECT *
-								FROM `Contacts`
-								WHERE (`FirstName` LIKE :query OR `LastName` LIKE :query) AND UID=?");
-    $stmt->bind_param(':query', '%' . $inData["query"] . '%' /*, "%" . $inData["query"] . "%", $inData["uid"]*/);
+                            FROM `Contacts`
+							WHERE (`FirstName` LIKE ? OR `LastName` LIKE ?) AND UID=?");
+    $stmt->bind_param("ssi", $query, $query, $inData["uid"]);
     $stmt->execute();
 
     $result = $stmt->get_result();
@@ -23,7 +24,7 @@ if ($conn->connect_error) {
             $searchResults .= ",";
         }
         $searchCount++;
-        $searchResults .= '"' . $row["CID"] . '"' . ', "' . $row["FirstName"] . '"' . ', "' . $row["LastName"] . '"';
+        $searchResults .= '{"firstName": "' . $row["FirstName"] . '"' . ', "lastName": "' . $row["LastName"] . '", "cid": ' . $row["CID"] . '}';
     }
 
     if ($searchCount == 0) {
@@ -55,6 +56,6 @@ function returnWithError($err)
 
 function returnWithInfo($searchResults)
 {
-    $retValue = '{"results":[' . $searchResults . '],"error":""}';
+    $retValue = '{"results": [' . $searchResults . '],"error":""}';
     sendResultInfoAsJson($retValue);
 }

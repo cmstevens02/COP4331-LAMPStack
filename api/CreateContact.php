@@ -21,9 +21,6 @@ if ($conn->connect_error) {
 
     // returns the last inserted id
     $cid = $conn->insert_id;
-    // echo "uid: " . $inData["uid"] . $inData["firstName"] . $inData["lastName"] . $inData["email"] . $inData["phone"];
-
-    // echo "prev: " . $prev_cid . "   curr: " . $cid;
 
     // If we have a different id after inserting, we successfully inserted!
     if ($prev_cid != $cid) {
