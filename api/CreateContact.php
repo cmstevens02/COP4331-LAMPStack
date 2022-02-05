@@ -21,9 +21,9 @@ if ($conn->connect_error) {
 
     // returns the last inserted id
     $cid = $conn->insert_id;
-    echo "uid: " . $inData["uid"] . $inData["firstName"] . $inData["lastName"] . $inData["email"] . $inData["phone"];
+    // echo "uid: " . $inData["uid"] . $inData["firstName"] . $inData["lastName"] . $inData["email"] . $inData["phone"];
 
-    echo "prev: " . $prev_cid . "   curr: " . $cid;
+    // echo "prev: " . $prev_cid . "   curr: " . $cid;
 
     // If we have a different id after inserting, we successfully inserted!
     if ($prev_cid != $cid) {
@@ -50,13 +50,13 @@ function sendResultInfoAsJson($obj)
 
 function returnWithInfo($uid, $msg)
 {
-    $retValue = '{"id":' . $uid . ',"message":"' . $msg . '"}';
+    $retValue = '{"cid":' . $uid . ',"message":"' . $msg . '"}';
     sendResultInfoAsJson($retValue);
 }
 
 function returnWithError($uid, $err)
 {
-    $retValue = '{"id":' . $uid . ',"error":"' . $err . '"}';
+    $retValue = '{"cid":' . $uid . ',"error":"' . $err . '"}';
     sendResultInfoAsJson($retValue);
 }
 ?>

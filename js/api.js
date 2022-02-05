@@ -22,20 +22,16 @@ class User {
 // id: number
 function setCookie(id) {
     const mins = 20;
-    const date = new Date(Date.now() + mins * 60 * 1000);
     let cm = getCookieMap();
     cm.set("id", id);
-    cm.set("expires", date.toUTCString());
-    document.cookie = serializeCookieMap(cm);
+    serializeCookieMap(cm);
 }
 
 function getCookieMap() {
-    if (document.cookie.length == 0) {
-        return new Error("getID error: cookie doesn't exist");
-    }
+    if (document.cookie.length == 0) return new Map();
 
     const m = new Map();
-    document.cookie.split(";").forEach((val) => {
+    document.cookie.split("; ").forEach((val) => {
         spl = val.split("=");
         m.set(spl[0], spl[1]);
     });
@@ -44,13 +40,13 @@ function getCookieMap() {
 }
 
 function serializeCookieMap(cm) {
-    let parsed = "";
-
+    if (cm.size == 0) return "";
+    
+    const mins = 20;
+    const date = new Date(Date.now() + mins * 60 * 1000);
     cm.forEach((v, k, m) => {
-        parsed += `${k}=${v};`;
+        document.cookie = `${k}=${v}; expires=${date.toUTCString()};`;
     });
-
-    return parsed;
 }
 
 function getID() {

@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 } else {
     $stmt = $conn->prepare("SELECT *
 								FROM `Contacts`
-								WHERE `FirstName` LIKE :query OR `LastName` LIKE :query/* AND UID=?*/");
+								WHERE (`FirstName` LIKE :query OR `LastName` LIKE :query) AND UID=?");
     $stmt->bind_param(':query', '%' . $inData["query"] . '%' /*, "%" . $inData["query"] . "%", $inData["uid"]*/);
     $stmt->execute();
 
@@ -49,7 +49,7 @@ function sendResultInfoAsJson($obj)
 
 function returnWithError($err)
 {
-    $retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
+    $retValue = '{"error":"' . $err . '"}';
     sendResultInfoAsJson($retValue);
 }
 

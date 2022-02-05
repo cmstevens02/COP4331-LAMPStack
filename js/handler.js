@@ -16,7 +16,7 @@ function handleLogin() {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            if (resp.error.length > 0) throw Error(resp.error);
+            if (resp.error) throw Error(resp.error);
             console.log(resp);
             setCookie(resp.id);
             window.location.href = "contacts.html";
@@ -99,17 +99,17 @@ function handleCreateContact() {
 
     fetch(urlBase + "CreateContact" + ext, {
         method: "POST",
-        body: json.stringify(params),
+        body: JSON.stringify(params),
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            if (resp.error.length > 0) throw Error(resp.error);
+            if (resp.error > 0) throw Error(resp.error);
             document.querySelector("#create-result").innerHTML =
                 "Contact created";
 
             cm = getCookieMap();
             cm.set("cid", resp.cid);
-            document.cookie = serializeCookieMap(cm);
+            serializeCookieMap(cm);
         })
         .catch((err) => {
             console.log(err);
@@ -136,7 +136,9 @@ function handleSaveContact() {
     }
 
     const cm = getCookieMap();
+    console.log(cm);
     const cid = cm.get("cid");
+    console.log(cid);
 
     const params = {
         uid: uid,
@@ -146,13 +148,14 @@ function handleSaveContact() {
         email: email,
         phone: phone,
     };
+    console.log(params);
     fetch(urlBase + "UpdateContact" + ext, {
         method: "POST",
-        body: json.stringify(params),
+        body: JSON.stringify(params),
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            if (resp.error.length > 0) throw Error(resp.error);
+            if (resp.error) throw Error(resp.error);
 
             document.querySelector("#create-result").innerHTML =
                 "Contact saved :)";
@@ -164,9 +167,15 @@ function handleSaveContact() {
     // Close contact tab
     document.getElementById("info").classList.remove("info-selected");
 
+    document.querySelector("#editContactFirstName").value = "";
+    document.querySelector("#editContactLastName").value = "";
+    document.querySelector("#editContactPhoneNumber").value = "";
+    document.querySelector("#editContactEmail").value = "";
+
+
     // Remove cid from cookie
     cm.delete("cid");
-    document.cookie = serializeCookieMap(cm);
+    serializeCookieMap(cm);
 }
 
 // Deletes a user
@@ -195,23 +204,24 @@ function handleDeleteUser() {
         });
 }
 
-function handleSearchContacts() {
+function handleSearchContact(){
     let uid = getID();
-    let query = document.querySelector("#searchContact").value;
+    let query = document.querySelector("#search-contact").value;
 
     if (query.length == 0) {
         return;
     }
+    console.log(query);
 
     const params = {
         uid: uid,
         query: query,
     };
-
+    console.log(params);
     let arr = [];
     fetch(urlBase + "SearchContacts" + ext, {
         method: "POST",
-        body: json.stringify(params),
+        body: JSON.stringify(params),
     })
         .then((resp) => resp.json())
         .then((resp) => {
