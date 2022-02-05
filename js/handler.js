@@ -172,19 +172,46 @@ function handleSaveContact() {
     document.querySelector("#editContactPhoneNumber").value = "";
     document.querySelector("#editContactEmail").value = "";
 
-
     // Remove cid from cookie
     cm.delete("cid");
     serializeCookieMap(cm);
 }
 
+// Returns: error
+function handleDeleteContact(uid, cid) {
+    const params = {
+        uid: uid,
+        cid: cid,
+    };
+
+    fetch(urlBase + "DeleteContact" + ext, {
+        method: "POST",
+        body: JSON.stringify(params),
+    })
+        .then((resp) => resp.json())
+        .then((resp) => {
+            if (resp.error > 0) throw Error(resp.error);
+            document.querySelector("#create-result").innerHTML =
+                "Contact created";
+
+            cm = getCookieMap();
+            cm.set("cid", resp.cid);
+            serializeCookieMap(cm);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
+    return null;
+}
 // Deletes a user
 function handleDeleteUser() {
-    let uid = getID();
-    let currentUser = getUser(uid);
+    let cm = getCookieMap;
+    const uid = cm.get("id");
+    const cid = cm.get("cid");
 
     const params = {
-        password: currentUser.password,
+        cid: cid,
         uid: uid,
     };
 
@@ -194,17 +221,14 @@ function handleDeleteUser() {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            console.log(resp);
             if (resp.error) throw Error(resp.error);
-            window.location.href = "index.html";
-            document.querySelector("#login-result").innerHTML = "User Deleted";
         })
         .catch((err) => {
             console.log(err);
         });
 }
 
-function handleSearchContact(){
+function handleSearchContact() {
     let uid = getID();
     let query = document.querySelector("#search-contact").value;
 
