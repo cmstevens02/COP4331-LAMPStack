@@ -107,7 +107,7 @@ function handleCreateContact() {
             document.querySelector("#create-result").innerHTML =
                 "Contact created";
 
-            cm = getCookieMap();
+            let cm = getCookieMap();
             cm.set("cid", resp.cid);
             serializeCookieMap(cm);
         })
@@ -136,9 +136,7 @@ function handleSaveContact() {
     }
 
     const cm = getCookieMap();
-    console.log(cm);
     const cid = cm.get("cid");
-    console.log(cid);
 
     const params = {
         uid: uid,
@@ -169,6 +167,7 @@ function handleSaveContact() {
 
     document.querySelector("#editContactFirstName").value = "";
     document.querySelector("#editContactLastName").value = "";
+
     document.querySelector("#editContactPhoneNumber").value = "";
     document.querySelector("#editContactEmail").value = "";
 
@@ -194,7 +193,7 @@ function handleDeleteContact(uid, cid) {
             document.querySelector("#create-result").innerHTML =
                 "Contact created";
 
-            cm = getCookieMap();
+            let cm = getCookieMap();
             cm.set("cid", resp.cid);
             serializeCookieMap(cm);
         })
@@ -202,11 +201,20 @@ function handleDeleteContact(uid, cid) {
             console.log(err);
         });
 
+    document.getElementById("info").classList.remove("info-selected");
+
+    document.querySelector("#editContactFirstName").value = "";
+    document.querySelector("#editContactLastName").value = "";
+
+    document.querySelector("#editContactPhoneNumber").value = "";
+    document.querySelector("#editContactEmail").value = "";
+
+    document.querySelector("#create-result").innerHTML = "Contact Deleted :)";
     return null;
 }
 // Deletes a user
 function handleDeleteUser() {
-    let cm = getCookieMap;
+    let cm = getCookieMap();
     const uid = cm.get("id");
     const cid = cm.get("cid");
 
@@ -231,18 +239,15 @@ function handleDeleteUser() {
 function handleSearchContact() {
     let uid = getID();
     let query = document.querySelector("#search-contact").value;
-
     if (query.length == 0) {
         return;
     }
-    console.log(query);
 
     const params = {
         uid: uid,
         query: query,
     };
-    console.log(params);
-    let arr = [];
+    let searchResults = document.querySelector("#search-results");
     fetch(urlBase + "SearchContacts" + ext, {
         method: "POST",
         body: JSON.stringify(params),
@@ -250,19 +255,28 @@ function handleSearchContact() {
         .then((resp) => resp.json())
         .then((resp) => {
             console.log(resp);
-            res = document.querySelector("#search-results");
-            res.value = resp;
-            arr = resp.results;
+            searchResults.innerHTML = "";
+            resp.results.forEach((val, i, arr) => {
+                searchResults.innerHTML +=
+                    `<div class="search-item">` +
+                    `<div class="search-content">` +
+                    `<span class="search-name">${val.firstName} ${val.lastName}</span>` +
+                    (val.phone
+                        ? `<span class="search-phone">Phone: ${val.phone}</span>`
+                        : "") +
+                    (val.email
+                        ? `<span class="search-email">Email: ${val.email}</span>`
+                        : "") +
+                    `</div class="search-content">` +
+                    `<button class="search-edit button" onclick="editContact(${val.cid})">` +
+                    `<i class="icon fas fa-xs fa-edit"/>` +
+                    `</button>` +
+                    `</div>`;
+            });
         })
         .catch((err) => {
             console.log(err);
         });
-
-    for (let i = 0; i < arr.length; i++) {
-        console.log(arr[i].cid);
-        console.log(arr[i].firstName);
-        console.log(arr[i].lastName);
-    }
 }
 
 function logOut() {

@@ -32,7 +32,7 @@ function getCookieMap() {
 
     const m = new Map();
     document.cookie.split("; ").forEach((val) => {
-        spl = val.split("=");
+        let spl = val.split("=");
         m.set(spl[0], spl[1]);
     });
 
@@ -50,7 +50,7 @@ function serializeCookieMap(cm) {
 }
 
 function getID() {
-    cm = getCookieMap();
+    let cm = getCookieMap();
     return cm.get("id");
 }
 
@@ -61,31 +61,15 @@ function logout() {
 
 //! --------------------- API ENDPOINTS ---------------------
 
-// returns: error
-function handleDeleteUser(uid, password) {
-    const params = {
-        password: password,
-        uid: uid,
-    };
-
-    const resp = doRequest("DeleteUser", params);
-    if (!resp) {
-        return new Error(resp);
-    }
-
-    setCookie(0);
-    return null;
-}
-
 // returns: User Object
 function getUser(uid) {
     let user;
     const params = {
         uid: uid,
     };
-    fetch(urlBase + "GetUser" + ext, {
+    fetch(baseURL + "GetUser" + ext, {
         method: "POST",
-        body: params,
+        body: JSON.stringify(params),
     })
         .then((resp) => resp.json())
         .then((resp) => {
@@ -101,34 +85,4 @@ function getUser(uid) {
         .catch((err) => console.log(err));
 
     return user;
-}
-
-// Returns: ContactStub[]
-function searchContacts(uid, query) {
-    const params = {
-        uid: uid,
-        query: query,
-    };
-
-    const resp = doRequest("UpdateContact", params);
-    if (!resp) {
-        return new Error(resp);
-    }
-
-    return null;
-}
-
-// Returns: Contact
-function getContact(uid, cid) {
-    const params = {
-        uid: uid,
-        cid: cid,
-    };
-
-    const resp = doRequest("GetContact", params);
-    if (!resp) {
-        return new Error(resp);
-    }
-
-    return null;
 }

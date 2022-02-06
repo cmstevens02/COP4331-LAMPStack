@@ -1,0 +1,45 @@
+@use "vars" as *;
+
+#search-results {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-size: 1.5em;
+
+    .search-item {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
+        justify-content: space-around;
+
+        background-color: $tertiary;
+        border-radius: $input-br;
+
+        width: fit-content;
+        padding: 1em;
+        margin: 1em;
+
+        .search-content {
+            span {
+                color: $secondary;
+            }
+        }
+
+        .search-edit {
+            background-color: $secondary;
+        }
+
+        .button {
+            display: flex;
+            justify-items: center;
+            align-items: center;
+
+            background-color: $primary;
+            color: $secondary;
+            &:hover {
+                background-color: $secondary;
+                color: $primary;
+            }
+        }
+    }
+}
