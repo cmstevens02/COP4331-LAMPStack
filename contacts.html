@@ -12,8 +12,7 @@
 
     <script
       src="https://kit.fontawesome.com/52838c773c.js"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
 
     <link href="css/styles.css" rel="stylesheet" />
     <link
@@ -21,11 +20,11 @@
       rel="stylesheet"
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
-    />
+      />
     <link
       href="https://fonts.googleapis.com/css?family=Open Sans"
       rel="stylesheet"
-    />
+      />
   </head>
 
   <body>
@@ -37,8 +36,7 @@
             <button
               class="button inverse"
               id="createContact"
-              onclick="handleCreateContact()"
-            >
+              onclick="handleCreateContact()">
               Add Contact
             </button>
           </div>
@@ -56,10 +54,11 @@
             id="search-contact"
             placeholder="Search for a contact..."
             onchange="handleSearchContact()"
-          />
+            />
         </div>
 
         <div id="search-results"></div>
+
       </div>
       <div id="info">
         <h1 class="text-s">Edit Contact</h1>
@@ -71,7 +70,7 @@
               class="round"
               id="editContactFirstName"
               placeholder="first name"
-            />
+              />
           </div>
           <div class="search-input input">
             <input
@@ -79,7 +78,7 @@
               class="round"
               id="editContactLastName"
               placeholder="last name"
-            />
+              />
           </div>
           <div class="search-input input">
             <input
@@ -87,7 +86,7 @@
               class="round"
               id="editContactPhoneNumber"
               placeholder="phone number"
-            />
+              />
           </div>
           <div class="search-input input">
             <input
@@ -95,11 +94,14 @@
               class="round"
               id="editContactEmail"
               placeholder="email"
-            />
+              />
           </div>
           <span id="create-result"></span>
 
-          <button class="button inverse" onclick="handleSaveContact()">Save</button>
+          <div>
+            <button class="button inverse" onclick="handleSaveContact()">Save</button>
+            <button class="button" onclick="handleDeleteContact()">Delete</button>
+          </div>
         </div>
       </div>
     </div>

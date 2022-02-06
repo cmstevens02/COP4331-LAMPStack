@@ -41,7 +41,7 @@ function getCookieMap() {
 
 function serializeCookieMap(cm) {
     if (cm.size == 0) return "";
-    
+
     const mins = 20;
     const date = new Date(Date.now() + mins * 60 * 1000);
     cm.forEach((v, k, m) => {
@@ -101,21 +101,6 @@ function getUser(uid) {
         .catch((err) => console.log(err));
 
     return user;
-}
-
-// Returns: error
-function deleteContact(uid, cid) {
-    const params = {
-        uid: uid,
-        cid: cid,
-    };
-
-    const resp = doRequest("DeleteContact", params);
-    if (!resp) {
-        return new Error(resp);
-    }
-
-    return null;
 }
 
 // Returns: ContactStub[]
