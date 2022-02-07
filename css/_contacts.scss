@@ -1,0 +1,55 @@
+@use "vars" as *;
+
+#contacts {
+    display: flex;
+    position: relative;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+
+    font-family: "Open Sans", Arial, Helvetica, sans-serif;
+}
+
+#search {
+    flex: 6;
+    height: 100%;
+    padding: 2rem 10rem;
+}
+
+#info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 0em 1em;
+    height: 100%;
+
+    background-color: $low;
+
+    transition: all 1s ease;
+    flex-grow: 0.00001;
+    transform: scaleX(0);
+    transform-origin: right;
+    opacity: 0;
+
+    .container {
+        background-color: $high;
+    }
+}
+
+.info-selected {
+    transform: scaleX(1) !important;
+    flex-grow: 2 !important;
+    opacity: 1 !important;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+        vertical-align: center;
+    }
+}

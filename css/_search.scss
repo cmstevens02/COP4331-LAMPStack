@@ -1,0 +1,59 @@
+@use "vars" as *;
+
+#search-results {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-size: 1.5em;
+
+    .search-item {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
+        justify-content: space-around;
+
+        background-color: $mid;
+        border-radius: $input-br;
+
+        width: fit-content;
+        padding: 1em;
+        margin: 1em;
+
+        .search-content {
+            span {
+                color: $high;
+            }
+        }
+
+        .search-edit {
+            background-color: $high;
+        }
+
+        .button {
+            display: flex;
+            justify-items: center;
+            align-items: center;
+
+            background-color: $low;
+            color: $high;
+            &:hover {
+                background-color: $high;
+                color: $low;
+            }
+        }
+    }
+}
+
+.search-input {
+    width: 100% !important;
+    font-size: 1.5em;
+
+    input {
+        caret-color: $low;
+        color: $low;
+
+        &::placeholder {
+            color: $mid;
+        }
+    }
+}

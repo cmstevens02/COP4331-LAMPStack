@@ -1,0 +1,43 @@
+@use "vars" as *;
+
+@mixin titlify($drop, $spacing) {
+    letter-spacing: $spacing;
+    text-shadow: $drop $drop $mid;
+}
+
+.txt-title {
+    text-align: left;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+
+    @include titlify(0.3rem, 0.35rem);
+
+    @media screen and (min-width: 435px) {
+        font-size: 4rem;
+        text-shadow: 0.5rem 0.5rem $mid;
+    }
+}
+
+.txt-subtitle {
+    @include titlify(0.2rem, 0.2rem);
+    font-size: 1.5rem;
+    align-self: center;
+    color: rgba($low, 0.8);
+}
+
+.txt-subtext {
+    font-size: 1rem;
+}
+
+.high {
+    color: $high;
+}
+.mid {
+    color: $mid;
+}
+.low {
+    color: $low;
+}
+.alert {
+    color: $alert;
+}
