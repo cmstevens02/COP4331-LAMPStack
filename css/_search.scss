@@ -12,7 +12,7 @@
         flex-grow: 1;
         justify-content: space-around;
 
-        background-color: $tertiary;
+        background-color: $mid;
         border-radius: $input-br;
 
         width: fit-content;
@@ -21,12 +21,12 @@
 
         .search-content {
             span {
-                color: $secondary;
+                color: $high;
             }
         }
 
         .search-edit {
-            background-color: $secondary;
+            background-color: $high;
         }
 
         .button {
@@ -34,12 +34,26 @@
             justify-items: center;
             align-items: center;
 
-            background-color: $primary;
-            color: $secondary;
+            background-color: $low;
+            color: $high;
             &:hover {
-                background-color: $secondary;
-                color: $primary;
+                background-color: $high;
+                color: $low;
             }
+        }
+    }
+}
+
+.search-input {
+    width: 100% !important;
+    font-size: 1.5em;
+
+    input {
+        caret-color: $low;
+        color: $low;
+
+        &::placeholder {
+            color: $mid;
         }
     }
 }

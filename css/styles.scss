@@ -1,62 +1,17 @@
 @use "vars" as *;
+@use "app";
+@use "cards";
 @use "contacts";
 @use "search";
+@use "text";
+@use "trim";
 
-html {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    width: 100%;
-    height: 100%;
+* {
+    font-family: $font;
 }
 
 a {
-    color: $secondary !important;
-}
-
-#body {
-    height: 100%;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    width: 70%;
-
-    font-family: "Open Sans", Arial, Helvetica, sans-serif;
-    background: $secondary;
-}
-
-body {
-    width: 100%;
-}
-
-.text-p {
-    color: $primary;
-}
-.text-s {
-    color: $secondary;
-}
-.text-t {
-    color: $tertiary;
-}
-
-.title {
-    font-size: 3em;
-    text-align: center;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    width: 50%;
-    padding: 25px;
-    margin-bottom: 2em;
-    border-radius: 2rem;
-
-    background-color: $tertiary;
-    font-size: 1em;
+    color: $alert !important;
 }
 
 .button {
@@ -64,28 +19,28 @@ body {
     padding: 0.25em 1em;
 
     border: none;
-    border-radius: $input-br;
 
-    background-color: $secondary;
-    color: $primary;
+    background-color: $low;
+    color: $high;
     transition: all $bg-trans ease;
     font-size: 1.25em;
 
     &:hover {
-        background-color: $primary;
-        color: $secondary;
+        background-color: $alert;
+        color: $low;
     }
 
     &.inverse {
-        background-color: $primary;
-        color: $secondary;
+        background-color: $low;
+        color: $high;
 
         &:hover {
-            background-color: $tertiary;
-            color: $secondary;
+            background-color: $mid;
+            color: $high;
         }
     }
 }
+
 .input-large {
     font-size: 1.5em;
 }
@@ -96,6 +51,7 @@ body {
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
+    border: 2px solid $low;
 
     .icon {
         display: flex;
@@ -105,32 +61,24 @@ body {
         height: 1.5em;
         width: 1.5em;
 
-        background-color: $primary;
-        color: $secondary;
-
-        border-radius: $input-br 0 0 $input-br;
+        background-color: $low;
+        color: $high;
     }
 
     input {
+        font-size: 1em;
         flex: 1;
         padding: 0 0.5em;
 
         border: none;
-        border-radius: 0 $input-br $input-br 0;
-        background: $secondary;
-        color: $primary;
+        background: transparent;
+        color: $low;
 
         &::placeholder {
-            color: $tertiary;
+            color: $mid;
         }
         &:focus {
             outline: none;
-        }
-        &.sharp {
-            border-radius: 0;
-        }
-        &.round {
-            border-radius: $input-br;
         }
     }
 }
@@ -138,5 +86,5 @@ body {
 #register-result,
 #login-result,
 #create-result {
-    color: red;
+    color: $alert;
 }
