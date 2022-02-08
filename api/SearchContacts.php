@@ -37,7 +37,8 @@ if ($conn->connect_error) {
             $searchResults .= ",";
         }
         $searchCount++;
-        $searchResults .= '{"firstName":"' . $row['FirstName'] .
+        $searchResults .= '{"cid":"' . $row['CID'] .
+        '","firstName":"' . $row['FirstName'] .
         '","lastName":"' . $row['LastName'] .
         '","email":"' . $row['Email'] .
         '","phone":"' . $row['Phone'] .
