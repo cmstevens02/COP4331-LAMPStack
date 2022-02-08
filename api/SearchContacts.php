@@ -12,11 +12,22 @@ $conn = new mysqli("localhost", "YayApi", "ILovePHP", "COP4331");
 if ($conn->connect_error) {
     returnWithError($conn->connect_error);
 } else {
-    $query = '%' . $inData["query"] . '%';
+    $query = trim($inData["query"]);
+    $query = explode(" ", $query);
+    if (count($query) > 1)
+    {
+        $firstNameQuery = '%' . $query[0] . '%'; 
+        $lastNameQuery = '%' . $query[1] . '%';
+    }
+    else
+    {
+        $firstNameQuery = '%' . $query[0] . '%'; 
+        $lastNameQuery = '%' . $query[0] . '%';
+    }
     $stmt = $conn->prepare("SELECT *
                             FROM `Contacts`
-							WHERE (`FirstName` LIKE ? OR `LastName` LIKE ?) AND UID=?");
-    $stmt->bind_param("ssi", $query, $query, $inData["uid"]);
+							WHERE ((`FirstName` LIKE ? OR `LastName` LIKE ?) OR (`FirstName` LIKE ? OR `LastName` LIKE ?)) AND UID=?");
+    $stmt->bind_param("ssssi", $firstNameQuery, $lastNameQuery, $lastNameQuery, $firstNameQuery, $inData["uid"]);
     $stmt->execute();
 
     $result = $stmt->get_result();
@@ -26,7 +37,12 @@ if ($conn->connect_error) {
             $searchResults .= ",";
         }
         $searchCount++;
-        $searchResults .= '{"firstName": "' . $row["FirstName"] . '"' . ', "lastName": "' . $row["LastName"] . '", "cid": ' . $row["CID"] . '}';
+        $searchResults .= '{"firstName":"' . $row['FirstName'] .
+        '","lastName":"' . $row['LastName'] .
+        '","email":"' . $row['Email'] .
+        '","phone":"' . $row['Phone'] .
+        '","dateCreated":"' . $row['DateCreated'] .
+        '"}';
     }
 
     if ($searchCount == 0) {
