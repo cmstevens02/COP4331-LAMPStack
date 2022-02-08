@@ -176,7 +176,40 @@ function handleSaveContact() {
     serializeCookieMap(cm);
 }
 
-function editContact(cid) {}
+function editContact(cid) {
+    let firstNameElement = document.querySelector("#editContactFirstName");
+    let lastNameElement = document.querySelector("#editContactLastName");
+    let phoneElement = document.querySelector("#editContactPhoneNumber");
+    let emailElement = document.querySelector("#editContactEmail");
+
+    const uid = getID();
+    let cm = getCookieMap();
+    cm.set("cid", cid);
+    serializeCookieMap(cm);
+
+    const params = {
+        uid: uid,
+        cid: cid,
+    };
+    fetch(urlBase + "GetContact" + ext, {
+        method: "POST",
+        body: JSON.stringify(params),
+    })
+        .then((resp) => resp.json())
+        .then((resp) => {
+            if (resp.error) throw Error(resp.error);
+
+            firstNameElement.value = resp.firstName;
+            lastNameElement.value = resp.lastName;
+            phoneElement.value = resp.phone;
+            emailElement.value = resp.email;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
+    document.getElementById("info").classList.add("info-selected");
+}
 
 // Returns: error
 function handleDeleteContact(uid, cid) {
@@ -257,6 +290,7 @@ function handleSearchContact() {
         .then((resp) => resp.json())
         .then((resp) => {
             searchResults.innerHTML = "";
+            console.log(resp.results);
             resp.results.forEach((val, i, arr) => {
                 searchResults.innerHTML +=
                     `<div class="card">` +
