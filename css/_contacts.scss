@@ -25,8 +25,6 @@
     padding: 0em 1em;
     height: 100%;
 
-    background-color: $low;
-
     transition: all 1s ease;
     flex-grow: 0.00001;
     transform: scaleX(0);
@@ -37,11 +35,20 @@
         background-color: $high;
     }
 }
+.text-s {
+    color: $low;
+}
 
 .info-selected {
     transform: scaleX(1) !important;
     flex-grow: 2 !important;
     opacity: 1 !important;
+}
+
+.info-container {
+    padding: 3em;
+    padding-top: 1em;
+    box-shadow: 3px 3px 0 $mid;
 }
 
 .header {
