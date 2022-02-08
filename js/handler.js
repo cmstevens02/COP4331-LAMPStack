@@ -176,6 +176,8 @@ function handleSaveContact() {
     serializeCookieMap(cm);
 }
 
+function editContact(cid) {}
+
 // Returns: error
 function handleDeleteContact(uid, cid) {
     const params = {
@@ -254,23 +256,26 @@ function handleSearchContact() {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            console.log(resp);
             searchResults.innerHTML = "";
             resp.results.forEach((val, i, arr) => {
                 searchResults.innerHTML +=
-                    `<div class="search-item">` +
+                    `<div class="card">` +
                     `<div class="search-content">` +
-                    `<span class="search-name">${val.firstName} ${val.lastName}</span>` +
+                    `<div class="card-header">` +
+                    `<span>${val.firstName} ${val.lastName}</span>` +
+                    `<button class="search-edit button" onclick="editContact(${val.cid})">` +
+                    `<i class="icon fas fa-xs fa-edit"> </i>` +
+                    `</button>` +
+                    `</div>` +
+                    `<div class="card-body">` +
                     (val.phone
                         ? `<span class="search-phone">Phone: ${val.phone}</span>`
                         : "") +
                     (val.email
                         ? `<span class="search-email">Email: ${val.email}</span>`
                         : "") +
-                    `</div class="search-content">` +
-                    `<button class="search-edit button" onclick="editContact(${val.cid})">` +
-                    `<i class="icon fas fa-xs fa-edit"/>` +
-                    `</button>` +
+                    `</div>` +
+                    `</div>` +
                     `</div>`;
             });
         })
