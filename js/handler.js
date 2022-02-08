@@ -176,6 +176,41 @@ function handleSaveContact() {
     serializeCookieMap(cm);
 }
 
+function editContact(cid) {
+    let firstNameElement = document.querySelector("#editContactFirstName");
+    let lastNameElement = document.querySelector("#editContactLastName");
+    let phoneElement = document.querySelector("#editContactPhoneNumber");
+    let emailElement = document.querySelector("#editContactEmail");
+
+    const uid = getID();
+    let cm = getCookieMap();
+    cm.set("cid", cid);
+    serializeCookieMap(cm);
+
+    const params = {
+        uid: uid,
+        cid: cid,
+    };
+    fetch(urlBase + "GetContact" + ext, {
+        method: "POST",
+        body: JSON.stringify(params),
+    })
+        .then((resp) => resp.json())
+        .then((resp) => {
+            if (resp.error) throw Error(resp.error);
+
+            firstNameElement.value = resp.firstName;
+            lastNameElement.value = resp.lastName;
+            phoneElement.value = resp.phone;
+            emailElement.value = resp.email;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
+    document.getElementById("info").classList.add("info-selected");
+}
+
 // Returns: error
 function handleDeleteContact(uid, cid) {
     const params = {
@@ -254,23 +289,27 @@ function handleSearchContact() {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            console.log(resp);
             searchResults.innerHTML = "";
+            console.log(resp.results);
             resp.results.forEach((val, i, arr) => {
                 searchResults.innerHTML +=
-                    `<div class="search-item">` +
+                    `<div class="card">` +
                     `<div class="search-content">` +
-                    `<span class="search-name">${val.firstName} ${val.lastName}</span>` +
+                    `<div class="card-header">` +
+                    `<span>${val.firstName} ${val.lastName}</span>` +
+                    `<button class="search-edit button" onclick="editContact(${val.cid})">` +
+                    `<i class="icon fas fa-xs fa-edit"> </i>` +
+                    `</button>` +
+                    `</div>` +
+                    `<div class="card-body">` +
                     (val.phone
                         ? `<span class="search-phone">Phone: ${val.phone}</span>`
                         : "") +
                     (val.email
                         ? `<span class="search-email">Email: ${val.email}</span>`
                         : "") +
-                    `</div class="search-content">` +
-                    `<button class="search-edit button" onclick="editContact(${val.cid})">` +
-                    `<i class="icon fas fa-xs fa-edit"/>` +
-                    `</button>` +
+                    `</div>` +
+                    `</div>` +
                     `</div>`;
             });
         })

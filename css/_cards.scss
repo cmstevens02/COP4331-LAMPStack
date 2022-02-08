@@ -74,16 +74,20 @@
     flex-direction: row;
     flex-wrap: wrap;
 }
+.selectable-button {
+    border: none;
+    font-size: 2em;
+}
 
 .selectable-outer {
     margin: 3px 0;
-    height: 32px;
+    height: 2em;
 
     &:hover,
     &:active,
     &.selected {
         margin: 3px 0;
-        height: 32px;
+        height: 2.15em;
         box-shadow: 0 1px $low, 0 -1px $low;
         .selectable-inner {
             color: $high;
@@ -117,14 +121,15 @@
         left: 0;
     }
 
-    transition: background-color 0.4s;
-    background-color: $light-mid;
+    transition: all 0.4s;
+    background-color: transparent;
+    color: $low;
     display: flex;
     align-items: center;
     user-select: none;
     padding: 0 0.5rem;
     position: relative;
-    height: 28px;
+    height: 0.95em;
     top: 2px;
 
     white-space: nowrap;

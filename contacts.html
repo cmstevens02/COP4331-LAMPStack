@@ -29,15 +29,16 @@
       <div id="search">
         <div class="header">
           <span class="txt-title">Contacts</span>
-          <div class="add-contact">
+          <div class="selectable-outer">
             <button
-              class="button" id="createContact"
+              class="selectable-button selectable-inner" id="createContact"
               onclick="handleCreateContact()">
               Add Contact
             </button>
           </div>
-          <div class="log-out">
-            <button class="button" id="logout" onclick="logOut()">
+          <div class="selectable-outer">
+            <button class="selectable-button selectable-inner" id="logout"
+              onclick="logOut()">
               Log Out
             </button>
           </div>
@@ -57,9 +58,8 @@
 
       </div>
       <div id="info">
-        <h1 class="text-s">Edit Contact</h1>
-        <div class="container">
-          <h3 class="text-s"></h3>
+        <div class="container info-container">
+          <h3 class="text-s">Edit Contact</h3>
           <div class="input">
             <input
               type="text"
