@@ -209,10 +209,16 @@ function editContact(cid) {
         });
 
     document.getElementById("info").classList.add("info-selected");
+    handleSearchContact()
 }
 
 // Returns: error
-function handleDeleteContact(uid, cid) {
+function handleDeleteContact() {
+    let cm = getCookieMap();
+    const cid = cm.get("cid");
+    const uid = getID();
+    serializeCookieMap(cm);
+
     const params = {
         uid: uid,
         cid: cid,
@@ -226,7 +232,7 @@ function handleDeleteContact(uid, cid) {
         .then((resp) => {
             if (resp.error > 0) throw Error(resp.error);
             document.querySelector("#create-result").innerHTML =
-                "Contact created";
+                "Contact Deleted";
 
             let cm = getCookieMap();
             cm.set("cid", resp.cid);
@@ -245,6 +251,7 @@ function handleDeleteContact(uid, cid) {
     document.querySelector("#editContactEmail").value = "";
 
     document.querySelector("#create-result").innerHTML = "Contact Deleted :)";
+    handleSearchContact()
     return null;
 }
 // Deletes a user
@@ -257,7 +264,6 @@ function handleDeleteUser() {
         cid: cid,
         uid: uid,
     };
-
     fetch(urlBase + "DeleteUser" + ext, {
         method: "POST",
         body: JSON.stringify(params),
