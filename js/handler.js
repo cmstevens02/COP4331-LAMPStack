@@ -16,7 +16,7 @@ function handleLogin() {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            if (resp.error) throw Error(resp.error);
+            if (!resp) throw Error(resp);
             console.log(resp);
             setCookie(resp.id);
             window.location.href = "contacts.html";
@@ -73,7 +73,7 @@ function handleRegister() {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            if (resp.error.length > 0) throw Error(resp.error);
+            if (resp.error) throw Error(resp.error);
 
             setCookie(resp.id);
             window.location.href = "contacts.html";
@@ -84,17 +84,23 @@ function handleRegister() {
         });
 }
 
-// Adds a contact
-function handleCreateContact() {
+function openCreateContact() {
     // Open contact tab
     document.getElementById("info").classList.add("info-selected");
+    let cm = getCookieMap();
+    cm.set("cid", 0);
+    serializeCookieMap(cm);
+    document.querySelector("#create-result").innerHTML = "";
+}
 
+// Adds a contact
+function handleCreateContact() {
     const params = {
         uid: getID(),
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
+        firstName: document.querySelector("#editContactFirstName").value,
+        lastName: document.querySelector("#editContactLastName").value,
+        email: document.querySelector("#editContactPhoneNumber").value,
+        phone: document.querySelector("#editContactEmail").value,
     };
 
     fetch(urlBase + "CreateContact" + ext, {
@@ -114,10 +120,30 @@ function handleCreateContact() {
         .catch((err) => {
             console.log(err);
         });
+
+    // Close contact tab
+    document.getElementById("info").classList.remove("info-selected");
+
+    document.querySelector("#editContactFirstName").value = "";
+    document.querySelector("#editContactLastName").value = "";
+
+    document.querySelector("#editContactPhoneNumber").value = "";
+    document.querySelector("#editContactEmail").value = "";
+
+    handleSearchContact();
+    document.getElementById("info").classList.remove("info-selected");
 }
 
 // Saves a contact after editing
 function handleSaveContact() {
+    const cm = getCookieMap();
+    const cid = cm.get("cid");
+
+    if (!cid || cid == 0) {
+        handleCreateContact();
+        return;
+    }
+
     let uid = getID();
     let firstName = document.querySelector("#editContactFirstName").value;
     let lastName = document.querySelector("#editContactLastName").value;
@@ -134,9 +160,6 @@ function handleSaveContact() {
             "Please enter all information.";
         return;
     }
-
-    const cm = getCookieMap();
-    const cid = cm.get("cid");
 
     const params = {
         uid: uid,
@@ -171,15 +194,58 @@ function handleSaveContact() {
     document.querySelector("#editContactPhoneNumber").value = "";
     document.querySelector("#editContactEmail").value = "";
 
+    let e = document.querySelector(`#card-${cid}`);
+    if (e) e.remove();
+
+    handleSearchContact();
     // Remove cid from cookie
     cm.delete("cid");
     serializeCookieMap(cm);
 }
 
-function editContact(cid) {}
+function editContact(cid) {
+    let firstNameElement = document.querySelector("#editContactFirstName");
+    let lastNameElement = document.querySelector("#editContactLastName");
+    let phoneElement = document.querySelector("#editContactPhoneNumber");
+    let emailElement = document.querySelector("#editContactEmail");
+
+    const uid = getID();
+    let cm = getCookieMap();
+    cm.set("cid", cid);
+    serializeCookieMap(cm);
+
+    const params = {
+        uid: uid,
+        cid: cid,
+    };
+    fetch(urlBase + "GetContact" + ext, {
+        method: "POST",
+        body: JSON.stringify(params),
+    })
+        .then((resp) => resp.json())
+        .then((resp) => {
+            if (resp.error) throw Error(resp.error);
+
+            firstNameElement.value = resp.firstName;
+            lastNameElement.value = resp.lastName;
+            phoneElement.value = resp.phone;
+            emailElement.value = resp.email;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
+    document.querySelector("#create-result").innerHTML = "";
+    document.getElementById("info").classList.add("info-selected");
+}
 
 // Returns: error
-function handleDeleteContact(uid, cid) {
+function handleDeleteContact() {
+    let cm = getCookieMap();
+    const cid = cm.get("cid");
+    const uid = getID();
+    serializeCookieMap(cm);
+
     const params = {
         uid: uid,
         cid: cid,
@@ -193,10 +259,10 @@ function handleDeleteContact(uid, cid) {
         .then((resp) => {
             if (resp.error > 0) throw Error(resp.error);
             document.querySelector("#create-result").innerHTML =
-                "Contact created";
+                "Contact Deleted :)";
 
             let cm = getCookieMap();
-            cm.set("cid", resp.cid);
+            cm.set("cid", 0);
             serializeCookieMap(cm);
         })
         .catch((err) => {
@@ -212,6 +278,7 @@ function handleDeleteContact(uid, cid) {
     document.querySelector("#editContactEmail").value = "";
 
     document.querySelector("#create-result").innerHTML = "Contact Deleted :)";
+    document.querySelector(`#card-${cid}`).remove();
     return null;
 }
 // Deletes a user
@@ -224,7 +291,6 @@ function handleDeleteUser() {
         cid: cid,
         uid: uid,
     };
-
     fetch(urlBase + "DeleteUser" + ext, {
         method: "POST",
         body: JSON.stringify(params),
@@ -241,7 +307,10 @@ function handleDeleteUser() {
 function handleSearchContact() {
     let uid = getID();
     let query = document.querySelector("#search-contact").value;
+    let searchResults = document.querySelector("#search-results");
+
     if (query.length == 0) {
+        searchResults.innerHTML = "";
         return;
     }
 
@@ -249,7 +318,6 @@ function handleSearchContact() {
         uid: uid,
         query: query,
     };
-    let searchResults = document.querySelector("#search-results");
     fetch(urlBase + "SearchContacts" + ext, {
         method: "POST",
         body: JSON.stringify(params),
@@ -259,7 +327,7 @@ function handleSearchContact() {
             searchResults.innerHTML = "";
             resp.results.forEach((val, i, arr) => {
                 searchResults.innerHTML +=
-                    `<div class="card">` +
+                    `<div id="card-${val.cid}" class="card">` +
                     `<div class="search-content">` +
                     `<div class="card-header">` +
                     `<span>${val.firstName} ${val.lastName}</span>` +
@@ -267,6 +335,7 @@ function handleSearchContact() {
                     `<i class="icon fas fa-xs fa-edit"> </i>` +
                     `</button>` +
                     `</div>` +
+                    `<div class="card-image icon-${(val.cid % 5) + 1}"></div>` +
                     `<div class="card-body">` +
                     (val.phone
                         ? `<span class="search-phone">Phone: ${val.phone}</span>`
