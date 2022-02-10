@@ -335,7 +335,9 @@ function handleSearchContact() {
                     `<i class="icon fas fa-xs fa-edit"> </i>` +
                     `</button>` +
                     `</div>` +
-                    `<div class="card-image icon-${(val.cid % 5) + 1}"></div>` +
+                    `<div class="card-image">` +
+                    `<div class="icon-${(val.cid % 5) + 1}"></div>` +
+                    `</div>` +
                     `<div class="card-body">` +
                     (val.phone
                         ? `<span class="search-phone">Phone: ${val.phone}</span>`
