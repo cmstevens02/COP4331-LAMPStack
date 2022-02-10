@@ -43,9 +43,9 @@
 
 .card-image {
     background-color: $mid;
-    width: 100%;
+    margin: 1em;
+    width: calc(100%-1em);
     height: 150px;
-    margin-bottom: 1rem;
     display: flex;
 
     img {

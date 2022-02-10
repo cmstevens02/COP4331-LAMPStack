@@ -58,9 +58,22 @@
 
 .main {
     position: relative;
-    padding: 0 15%;
+    overflow-y: scroll;
     justify-self: center;
     height: 100%;
+
+    &::-webkit-scrollbar {
+        background-color: transparent;
+        width: 7px;
+        height: 7px;
+        &-track,
+        &-corner {
+            background-color: transparent;
+        }
+        &-thumb {
+            background-color: $low;
+        }
+    }
 }
 
 .button {
