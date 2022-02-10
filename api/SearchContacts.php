@@ -16,18 +16,23 @@ if ($conn->connect_error) {
     $query = explode(" ", $query);
     if (count($query) > 1)
     {
-        $firstNameQuery = '%' . $query[0] . '%'; 
-        $lastNameQuery = '%' . $query[1] . '%';
+        $firstQuery = '%' . $query[0] . '%'; 
+        $secondQuery = '%' . $query[1] . '%';
     }
     else
     {
-        $firstNameQuery = '%' . $query[0] . '%'; 
-        $lastNameQuery = '%' . $query[0] . '%';
+        $firstQuery = '%' . $query[0] . '%'; 
+        $secondQuery = '%' . $query[0] . '%';
     }
     $stmt = $conn->prepare("SELECT *
                             FROM `Contacts`
-							WHERE ((`FirstName` LIKE ? OR `LastName` LIKE ?) OR (`FirstName` LIKE ? OR `LastName` LIKE ?)) AND UID=?");
-    $stmt->bind_param("ssssi", $firstNameQuery, $lastNameQuery, $lastNameQuery, $firstNameQuery, $inData["uid"]);
+							WHERE ((`FirstName` LIKE ? OR `LastName` LIKE ?) 
+                            OR (`FirstName` LIKE ? OR `LastName` LIKE ?) 
+                            OR `Phone` LIKE ? 
+                            OR `Email` LIKE ?)
+                            AND UID=?
+                            LIMIT 50");
+    $stmt->bind_param("ssssssi", $firstQuery, $secondQuery, $secondQuery, $firstQuery, $firstQuery, $firstQuery, $inData["uid"]);
     $stmt->execute();
 
     $result = $stmt->get_result();
@@ -37,7 +42,8 @@ if ($conn->connect_error) {
             $searchResults .= ",";
         }
         $searchCount++;
-        $searchResults .= '{"firstName":"' . $row['FirstName'] .
+        $searchResults .= '{"cid":"' . $row['CID'] .
+        '","firstName":"' . $row['FirstName'] .
         '","lastName":"' . $row['LastName'] .
         '","email":"' . $row['Email'] .
         '","phone":"' . $row['Phone'] .
