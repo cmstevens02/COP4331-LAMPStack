@@ -16,7 +16,7 @@ function handleLogin() {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            if (resp.error) throw Error(resp.error);
+            if (!resp) throw Error(resp);
             console.log(resp);
             setCookie(resp.id);
             window.location.href = "contacts.html";
@@ -73,7 +73,7 @@ function handleRegister() {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            if (resp.error.length > 0) throw Error(resp.error);
+            if (resp.error) throw Error(resp.error);
 
             setCookie(resp.id);
             window.location.href = "contacts.html";
