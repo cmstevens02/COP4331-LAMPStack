@@ -12,7 +12,8 @@
 
     <script
       src="https://kit.fontawesome.com/52838c773c.js"
-      crossorigin="anonymous"></script>
+      crossorigin="anonymous"
+    ></script>
 
     <link href="css/styles.css" rel="stylesheet" />
   </head>
@@ -31,14 +32,19 @@
           <span class="txt-title">Contacts</span>
           <div class="selectable-outer">
             <button
-              class="selectable-button selectable-inner" id="createContact"
-              onclick="openCreateContact()">
+              class="selectable-button selectable-inner"
+              id="createContact"
+              onclick="openCreateContact()"
+            >
               Add Contact
             </button>
           </div>
           <div class="selectable-outer">
-            <button class="selectable-button selectable-inner" id="logout"
-              onclick="logOut()">
+            <button
+              class="selectable-button selectable-inner"
+              id="logout"
+              onclick="logOut()"
+            >
               Log Out
             </button>
           </div>
@@ -51,11 +57,10 @@
             id="search-contact"
             placeholder="Search for a contact..."
             oninput="handleSearchContact()"
-            />
+          />
         </div>
 
         <div id="search-results"></div>
-
       </div>
       <div id="info">
         <div class="container info-container">
@@ -66,7 +71,7 @@
               class="round"
               id="editContactFirstName"
               placeholder="first name"
-              />
+            />
           </div>
           <div class="input">
             <input
@@ -74,29 +79,33 @@
               class="round"
               id="editContactLastName"
               placeholder="last name"
-              />
+            />
           </div>
           <div class="input">
             <input
               type="tel"
               class="round"
               id="editContactPhoneNumber"
-              placeholder="phone number"
-              />
+              placeholder="email"
+            />
           </div>
           <div class="input">
             <input
-              type="tel"
+              type="email"
               class="round"
               id="editContactEmail"
-              placeholder="email"
-              />
+              placeholder="phone number"
+            />
           </div>
           <span id="create-result"></span>
 
           <div>
-            <button class="button inverse" onclick="handleSaveContact()">Save</button>
-            <button class="button" onclick="handleDeleteContact()">Delete</button>
+            <button class="button inverse" onclick="handleSaveContact()">
+              Save
+            </button>
+            <button class="button" onclick="handleDeleteContact()">
+              Delete
+            </button>
           </div>
         </div>
       </div>
