@@ -320,23 +320,28 @@
 }
 
 .icon-1 {
-  background-image: url("http://friendidex.xyz/images/icon1.jpg") center/cover;
+  background: url("http://friendidex.xyz/images/icon1.jpg") center/contain no-repeat;
+  width: 100%;
 }
 
 .icon-2 {
-  background-image: url("http://friendidex.xyz/images/icon2.jpg") center/cover;
+  background: url("http://friendidex.xyz/images/icon2.jpg") center/contain no-repeat;
+  width: 100%;
 }
 
 .icon-3 {
-  background-image: url("http://friendidex.xyz/images/icon3.jpg") center/cover;
+  background: url("http://friendidex.xyz/images/icon3.jpg") center/contain no-repeat;
+  width: 100%;
 }
 
 .icon-4 {
-  background-image: url("http://friendidex.xyz/images/icon4.jpg") center/cover;
+  background: url("http://friendidex.xyz/images/icon4.jpg") center/contain no-repeat;
+  width: 100%;
 }
 
 .icon-5 {
-  background-image: url("http://friendidex.xyz/images/icon5.jpg") center/cover;
+  background: url("http://friendidex.xyz/images/icon5.jpg") center/contain no-repeat;
+  width: 100%;
 }
 
 #search-results {

@@ -67,7 +67,10 @@ $images: 1, 2, 3, 4, 5;
 
 @each $image in $images {
     .icon-#{$image} {
-        background-image: url("http://friendidex.xyz/images/icon#{$image}.jpg")
-            center/cover;
+        background: url("http://friendidex.xyz/images/icon#{$image}.jpg")
+            center/contain
+            no-repeat;
+
+        width: 100%;
     }
 }
